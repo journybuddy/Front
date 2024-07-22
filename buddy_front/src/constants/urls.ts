@@ -1,0 +1,2 @@
+// 프로젝트 전반에서 사용되는 상수 값
+export const KAKAO_AUTH_URL = 'https://kauth.kakao.com/oauth/authorize?client_id=9878f146abba1b592f7e00cd697887b4&redirect_uri=https://journeybuddy.com/oauth&response_type=code';
