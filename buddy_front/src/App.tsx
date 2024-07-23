@@ -3,12 +3,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MainPage from './views/MainPage';
+import KakaoRedirect from './components/KaKaoRedirect'; // CSS 문제 해결 후 확인
 
 const App: React.FC = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<MainPage />} />
+        <Route path="/journeybuddy/oauth/*" element={<KakaoRedirect />} />
       </Routes>
     </Router>
   );

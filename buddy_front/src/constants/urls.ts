@@ -1,2 +1,6 @@
-// 프로젝트 전반에서 사용되는 상수 값
-export const KAKAO_AUTH_URL = 'https://kauth.kakao.com/oauth/authorize?client_id=9878f146abba1b592f7e00cd697887b4&redirect_uri=https://journeybuddy.com/oauth&response_type=code';
+const REDIRECT_URI ='http://localhost:3000/journeybuddy/oauth';
+const CLIENT_ID = process.env.REACT_APP_REST_API_KEY;
+
+export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+
