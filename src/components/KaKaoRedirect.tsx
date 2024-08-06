@@ -1,49 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const KakaoRedirect = () => {
+const KakaoRedirect: React.FC = () => {
   const [status, setStatus] = useState('로그인 중입니다.');
   const backendUrl = process.env.REACT_APP_BACKEND_URL;
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태를 추가
   const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const code = queryParams.get('code'); // 인가코드 추출
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const code = queryParams.get('code');
-
     const sendCodeToBackend = async () => {
       try {
         if (code && backendUrl) {
-          // POST 요청을 보내서 백엔드에서 JWT 토큰을 요청합니다.
-          const response = await axios.post(`${backendUrl}/api/auth/kakao`, null, {
-            params: { code }
-          });
-          console.log('Server response:', response.data);
+          const response = await axios.post(`${backendUrl}/api/auth/kakao?code=${code}`);
+          const jwtToken = response.data;
+          localStorage.setItem('jwtToken', jwtToken);
+          console.log('JWT Token saved:', jwtToken); // 토큰이 올바르게 저장되었는지 확인
+          setStatus('로그인 성공');
 
-          // JWT 토큰을 받아서 상태를 업데이트합니다.
-          if (response.data.jwtToken) {
-            localStorage.setItem('jwtToken', response.data.jwtToken);
-            setStatus('로그인 성공!');
-          } else {
-            setStatus(response.data.message || '로그인 실패.');
-          }
+          // 약간의 지연을 추가하여 페이지가 빨리 지나가지 않도록 합니다.
+          setTimeout(() => {
+            setIsLoading(false);
+            navigate('/userinfo');
+          }, 2000); // 2초 지연
+
         } else {
           console.error('Authorization code or backend URL not found.');
-          setStatus('인증 코드 또는 백엔드 URL을 찾을 수 없습니다.');
+          setStatus('로그인 실패: 인가 코드 또는 백엔드 URL을 찾을 수 없습니다.');
         }
       } catch (error) {
-        console.error('Error sending code to backend:', error);
-        setStatus('백엔드로 인증 코드를 보내는 중 오류가 발생했습니다.');
+        if (axios.isAxiosError(error)) {
+          console.error('Error details:', error.response?.data);
+        } else {
+          console.error('Unexpected error:', error);
+        }
+        setStatus('로그인 실패: 서버와의 통신 오류');
       }
     };
-
     sendCodeToBackend();
-  }, [location.search, backendUrl]);
+  }, [code, backendUrl, navigate]);
 
   return (
     <div>
       <p>{status}</p>
-      <div className="spinner"></div>
+      {isLoading && <div className="spinner"></div>} {/* 로딩 상태일 때만 spinner 표시 */}
     </div>
   );
 };
