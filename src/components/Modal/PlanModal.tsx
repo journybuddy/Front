@@ -170,14 +170,13 @@ const PlanModal: React.FC<PlanModalProps> = ({ open, onClose }) => {
   const handleTransportChange = (value: string) => {
     setTransport(value);
   };
-
   return open ? (
     <S.PlanModalWrap show={open} onClick={onClose}>
       <S.PlanModalContainer onClick={(e) => e.stopPropagation()}>
         <S.PlanModalInner>
           <S.Header>
             <h2>여행 계획 생성하기</h2>
-            <button onClick={onClose} className="close-button">&times;</button>
+            <S.CuteButton onClick={onClose} className="close-button">&times;</S.CuteButton>
           </S.Header>
 
           <S.PlanModalContent>
@@ -185,7 +184,7 @@ const PlanModal: React.FC<PlanModalProps> = ({ open, onClose }) => {
               <div>
                 <h3>여행 지역을 선택해 주세요</h3>
                 <div>
-                  <label>
+                  <S.CuteLabel>
                     <select value={selectedProvinceCode} onChange={handleProvinceChange}>
                       <option value="">특별시/도를 선택하세요</option>
                       {provinces.map((province) => (
@@ -194,11 +193,11 @@ const PlanModal: React.FC<PlanModalProps> = ({ open, onClose }) => {
                         </option>
                       ))}
                     </select>
-                  </label>
+                  </S.CuteLabel>
                 </div>
                 {selectedProvinceCode && (
                   <div>
-                    <label>
+                    <S.CuteLabel>
                       <select value={selectedCityCode} onChange={handleCityChange}>
                         <option value="">시/군/구를 선택하세요</option>
                         {cities.map((city) => (
@@ -207,148 +206,151 @@ const PlanModal: React.FC<PlanModalProps> = ({ open, onClose }) => {
                           </option>
                         ))}
                       </select>
-                    </label>
+                    </S.CuteLabel>
                   </div>
                 )}
                 <div className="btn">
-                  <button onClick={handleNext} disabled={!selectedCityCode}>
+                  <S.CuteButton onClick={handleNext} disabled={!selectedCityCode}>
                     다음
-                  </button>
+                  </S.CuteButton>
                 </div>
               </div>
             )}
 
-            {step === 2 && (
+{step === 2 && (
               <div>
                 <h3>여행 날짜를 선택해주세요</h3>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <input
-                    type="date"
-                    value={startDate ? startDate.toISOString().split('T')[0] : ''}
-                    onChange={(e) => setStartDate(new Date(e.target.value))}
-                    placeholder="출발 날짜"
-                  />
-                  <input
-                    type="date"
-                    value={endDate ? endDate.toISOString().split('T')[0] : ''}
-                    onChange={(e) => {
-                      const newEndDate = new Date(e.target.value);
-                      setEndDate(newEndDate);
-                      calculatePeriod();
-                    }}
-                    placeholder="돌아오는 날짜"
-                  />
-                  <button onClick={handleDateComplete} style={{ marginLeft: '10px' }}>확인</button>
+                  <S.CuteLabel>
+                    <input
+                      type="date"
+                      value={startDate ? startDate.toISOString().split('T')[0] : ''}
+                      onChange={(e) => setStartDate(new Date(e.target.value))}
+                      placeholder="출발 날짜"
+                    />
+                  </S.CuteLabel>
+                  <S.CuteLabel>
+                    <input
+                      type="date"
+                      value={endDate ? endDate.toISOString().split('T')[0] : ''}
+                      onChange={(e) => {
+                        const newEndDate = new Date(e.target.value);
+                        setEndDate(newEndDate);
+                        calculatePeriod();
+                      }}
+                      placeholder="돌아오는 날짜"
+                    />
+                  </S.CuteLabel>
+                  <S.CuteButton onClick={handleDateComplete} style={{ marginLeft: '10px' }}>확인</S.CuteButton>
                 </div>
                 {periodMessage && <p>{periodMessage}</p>}
                 <div className="btn">
-                  <button onClick={handleBack}>뒤로</button>
-                  <button onClick={handleNext} disabled={!isDateComplete}>다음</button>
+                  <S.CuteButton onClick={handleBack}>뒤로</S.CuteButton>
+                  <S.CuteButton onClick={handleNext} disabled={!isDateComplete}>다음</S.CuteButton>
                 </div>
               </div>
             )}
+{step === 3 && (
+  <div>
+    <h3>여행 테마를 선택해주세요 (최소 2개)</h3>
+    <div>
+      <S.CuteLabel>
+        <input
+          type="checkbox"
+          value="휴식"
+          checked={selectedThemes.includes('휴식')}
+          onChange={() => handleThemeChange('휴식')}
+        />
+        휴식
+      </S.CuteLabel>
+      <S.CuteLabel>
+        <input
+          type="checkbox"
+          value="모험"
+          checked={selectedThemes.includes('모험')}
+          onChange={() => handleThemeChange('모험')}
+        />
+        모험
+      </S.CuteLabel>
+      <S.CuteLabel>
+        <input
+          type="checkbox"
+          value="문화"
+          checked={selectedThemes.includes('문화')}
+          onChange={() => handleThemeChange('문화')}
+        />
+        문화
+      </S.CuteLabel>
+      <S.CuteLabel>
+        <input
+          type="checkbox"
+          value="자연"
+          checked={selectedThemes.includes('자연')}
+          onChange={() => handleThemeChange('자연')}
+        />
+        자연
+      </S.CuteLabel>
+      {themeSelectionError && <p>테마는 최소 2개 이상 선택해야 합니다.</p>}
+    </div>
+    <div className="btn">
+      <S.CuteButton onClick={handleBack}>뒤로</S.CuteButton>
+      <S.CuteButton onClick={handleNext} disabled={selectedThemes.length < 2}>다음</S.CuteButton>
+    </div>
+  </div>
+)}
 
-            {step === 3 && (
-              <div>
-                <h3>여행 테마를 선택해주세요 (최소 2개)</h3>
-                <div>
-                  <label>
-                    <input
-                      type="checkbox"
-                      value="휴식"
-                      checked={selectedThemes.includes('휴식')}
-                      onChange={() => handleThemeChange('휴식')}
-                    />
-                    휴식
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      value="모험"
-                      checked={selectedThemes.includes('모험')}
-                      onChange={() => handleThemeChange('모험')}
-                    />
-                    모험
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      value="문화"
-                      checked={selectedThemes.includes('문화')}
-                      onChange={() => handleThemeChange('문화')}
-                    />
-                    문화
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      value="자연"
-                      checked={selectedThemes.includes('자연')}
-                      onChange={() => handleThemeChange('자연')}
-                    />
-                    자연
-                  </label>
-                  {themeSelectionError && <p>테마는 최소 2개 이상 선택해야 합니다.</p>}
-                </div>
-                <div className="btn">
-                  <button onClick={handleBack}>뒤로</button>
-                  <button onClick={handleNext} disabled={selectedThemes.length < 2}>다음</button>
-                </div>
-              </div>
-            )}
-
-            {step === 4 && (
-              <div>
-                <h3>교통수단을 선택해 주세요</h3>
-                <div>
-                  <label>
-                    <input
-                      type="radio"
-                      name="transport"
-                      value="car"
-                      checked={transport === 'car'}
-                      onChange={() => handleTransportChange('car')}
-                    />
-                    <FaCar /> 자동차
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="transport"
-                      value="bus"
-                      checked={transport === 'bus'}
-                      onChange={() => handleTransportChange('bus')}
-                    />
-                    <FaBus /> 버스
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="transport"
-                      value="train"
-                      checked={transport === 'train'}
-                      onChange={() => handleTransportChange('train')}
-                    />
-                    <FaTrain /> 기차
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="transport"
-                      value="plane"
-                      checked={transport === 'plane'}
-                      onChange={() => handleTransportChange('plane')}
-                    />
-                    <FaPlane /> 비행기
-                  </label>
-                </div>
-                <div className="btn">
-                  <button onClick={handleBack}>뒤로</button>
-                  <button onClick={handleFinalComplete}>완료</button>
-                </div>
-              </div>
-            )}
-          </S.PlanModalContent>
+{step === 4 && (
+  <div>
+    <h3>교통수단을 선택해 주세요</h3>
+    <div>
+      <S.CuteLabel>
+        <input
+          type="radio"
+          name="transport"
+          value="car"
+          checked={transport === 'car'}
+          onChange={() => handleTransportChange('car')}
+        />
+        <FaCar /> 자동차
+      </S.CuteLabel>
+      <S.CuteLabel>
+        <input
+          type="radio"
+          name="transport"
+          value="bus"
+          checked={transport === 'bus'}
+          onChange={() => handleTransportChange('bus')}
+        />
+        <FaBus /> 버스
+      </S.CuteLabel>
+      <S.CuteLabel>
+        <input
+          type="radio"
+          name="transport"
+          value="train"
+          checked={transport === 'train'}
+          onChange={() => handleTransportChange('train')}
+        />
+        <FaTrain /> 기차
+      </S.CuteLabel>
+      <S.CuteLabel>
+        <input
+          type="radio"
+          name="transport"
+          value="plane"
+          checked={transport === 'plane'}
+          onChange={() => handleTransportChange('plane')}
+        />
+        <FaPlane /> 비행기
+      </S.CuteLabel>
+    </div>
+    <div className="btn">
+      <S.CuteButton onClick={handleBack}>뒤로</S.CuteButton>
+      <S.CuteButton onClick={handleFinalComplete}>완료</S.CuteButton>
+    </div>
+  </div>
+)}
+  </S.PlanModalContent>
         </S.PlanModalInner>
       </S.PlanModalContainer>
     </S.PlanModalWrap>

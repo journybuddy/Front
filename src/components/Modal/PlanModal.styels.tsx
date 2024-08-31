@@ -115,3 +115,46 @@ export const NavigationButton = styled.button`
     color: #0056b3;
   }
 `;
+
+// 귀여운 스타일의 버튼
+export const CuteButton = styled.button`
+  background-color: #ffc0cb; /* 연한 핑크색 배경 */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 25px; /* 둥근 모서리 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #ff69b4; /* 핫핑크색으로 변경 */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* 그림자 강화 */
+  }
+`;
+
+// 귀여운 스타일의 라벨
+export const CuteLabel = styled.label`
+  background-color: #e0f7fa; /* 연한 민트색 배경 */
+  padding: 8px 12px;
+  border-radius: 15px; /* 둥근 모서리 */
+  font-size: 14px;
+  color: #00796b; /* 짙은 민트색 글씨 */
+  margin-right: 10px;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #b2dfdb; /* 호버 시 조금 더 진한 민트색 */
+  }
+
+  input {
+    margin-right: 8px; /* 체크박스나 라디오 버튼과 텍스트 사이의 간격 */
+  }
+`;

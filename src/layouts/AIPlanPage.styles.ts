@@ -8,7 +8,22 @@ export const PageWrapper = styled.div`
   font-family: 'Helvetica Neue', sans-serif;
   color: #555;
 `;
+export const ScrollableContainer = styled.div`
+  max-height: 300px; // Adjust the height as needed
+  overflow-y: auto; // Enable vertical scrolling
+  margin: 20px 0; // Add margin to separate from other components
+  background-color: #f9f9f9; /* 연한 회색 배경 */
 
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+`;
 export const Header = styled.header`
   text-align: center;
   margin-bottom: 30px;
