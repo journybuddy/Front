@@ -10,23 +10,23 @@ const KakaoRedirect: React.FC = () => {
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const code = queryParams.get('code'); // 인가코드 추출
-
   useEffect(() => {
     const sendCodeToBackend = async () => {
       try {
         if (code && backendUrl) {
           const response = await axios.post(`${backendUrl}/api/auth/kakao?code=${code}`);
-          const jwtToken = response.data;
+          localStorage.setItem('code', code);
+          console.log('Response status:', response.status);
+  
+          // 서버 응답에서 JWT 토큰 추출
+          const jwtToken = response.data.jwt; // 응답 구조에 맞게 수정
           localStorage.setItem('jwtToken', jwtToken);
           console.log('JWT Token saved:', jwtToken); // 토큰이 올바르게 저장되었는지 확인
           setStatus('로그인 성공');
-
-          // 약간의 지연을 추가하여 페이지가 빨리 지나가지 않도록 합니다.
           setTimeout(() => {
             setIsLoading(false);
             navigate('/userinfo');
           }, 2000); // 2초 지연
-
         } else {
           console.error('Authorization code or backend URL not found.');
           setStatus('로그인 실패: 인가 코드 또는 백엔드 URL을 찾을 수 없습니다.');
@@ -42,7 +42,6 @@ const KakaoRedirect: React.FC = () => {
     };
     sendCodeToBackend();
   }, [code, backendUrl, navigate]);
-
   return (
     <div>
       <p>{status}</p>
