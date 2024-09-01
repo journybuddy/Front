@@ -125,7 +125,20 @@ export const PlanResultPage: React.FC = () => {
         throw new Error('네트워크 응답이 올바르지 않습니다.');
       }
       const data = await response.json();
-      setSelectedPlaceInfo(data);
+      
+      // 응답 데이터 확인
+      console.log('Fetched Place Info:', data);
+
+      // 응답 데이터에서 필요한 정보 추출
+      const placeInfo = {
+        name: data.name || '정보 없음',
+        address: data.address || '정보 없음',
+        website: data.url || '정보 없음',
+        latitude: data.latitude || '정보 없음',
+        longitude: data.longitude || '정보 없음',
+      };
+
+      setSelectedPlaceInfo(placeInfo);
     } catch (error) {
       console.error('장소 정보 조회 중 오류 발생:', error);
       alert('장소 정보 조회 중 오류가 발생했습니다.');
@@ -170,11 +183,13 @@ export const PlanResultPage: React.FC = () => {
     setSelectedSchedule(schedule);
     // 장소 정보 가져오기
     fetchPlaceInfo(schedule.address);
+    console.log('Marker Clicked:', schedule); // 클릭된 일정 확인
   };
 
   const handleScheduleClick = (schedule: any, idx: number) => {
     // 클릭된 일정이 선택되었음을 나타내기 위해 상태 업데이트
     setSelectedSchedule(schedule);
+    console.log('Schedule Clicked:', schedule); // 클릭된 일정 확인
 
     // 장소 정보 가져오기
     fetchPlaceInfo(schedule.address);
@@ -268,7 +283,7 @@ export const PlanResultPage: React.FC = () => {
         <div style={{ flex: 1 }}>
           <div
             id="map"
-            style={{ width: '100%', height: '600px', marginBottom: '20px',  marginTop: '300px'  }}
+            style={{ width: '100%', height: '600px', marginBottom: '20px', marginTop: '300px' }}
             ref={mapRef}
           ></div>
           {selectedPlaceInfo && (
@@ -278,10 +293,12 @@ export const PlanResultPage: React.FC = () => {
               <p>주소: {selectedPlaceInfo.address}</p>
               <p>위도: {selectedPlaceInfo.latitude}</p>
               <p>경도: {selectedPlaceInfo.longitude}</p>
-              {selectedPlaceInfo.website && (
+              {selectedPlaceInfo.website && selectedPlaceInfo.website !== '정보 없음' ? (
                 <p>
                   웹사이트: <a href={selectedPlaceInfo.website} target="_blank" rel="noopener noreferrer">{selectedPlaceInfo.website}</a>
                 </p>
+              ) : (
+                <p>웹사이트 정보가 없습니다.</p>
               )}
             </S.PlaceInfoContainer>
           )}

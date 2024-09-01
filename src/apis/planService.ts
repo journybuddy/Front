@@ -2,6 +2,8 @@
 
 import axiosInstance from './axiosInstance';
 
+
+
 interface PlanRequest {
   startDate: string;
   endDate: string;
@@ -14,10 +16,20 @@ interface PlanRequest {
   }[];
 }
 
-interface SavePlanRequest {
+
+interface Plan {
   planId: number;
-  username: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  transport: string;
 }
+
+interface GetPlansParams {
+  page?: number;
+  size?: number;
+}
+
 
 export const createPlan = async (planData: PlanRequest) => {
   try {
@@ -104,24 +116,13 @@ export const createAIPlan = async (planData: any) => {
   }
 };
 
-//장소 저장
+//계획 저장
 export const savePlan = async (planData: any) => {
   try {
     const response = await axiosInstance.post('/plans/save', planData);
     return response.data;
   } catch (error) {
     console.error('Error saving the plan:', error);
-    throw error;
-  }
-};
-
-// 여행 계획 목록 조회
-export const getPlans = async () => {
-  try {
-    const response = await axiosInstance.get('/plans');
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching plans:', error);
     throw error;
   }
 };
@@ -134,5 +135,19 @@ export const getPlanDetail = async (planId: number) => {
   } catch (error) {
     console.error('Error fetching plan details:', error);
     throw error;
+  }
+};
+
+
+
+export const getPlans = async ({ page = 0, size = 9 }: GetPlansParams): Promise<Plan[]> => {
+  try {
+    const response = await axiosInstance.get('/my_page/plans', {
+      params: { page, size }
+    });
+    return response.data; // 성공적인 응답 데이터 반환
+  } catch (error) {
+    console.error('여행 계획 조회 중 오류 발생:', error);
+    throw error; // 에러 발생 시 throw
   }
 };
