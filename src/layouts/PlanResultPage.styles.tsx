@@ -45,7 +45,7 @@ export const MapWrapper = styled.div`
   display: flex;
   justify-content: center; /* Center the map horizontally */
   align-items: flex-start;
-  margin-top: 200px; /* Adjust the top margin to align with the schedule list */
+  margin-top: 400px; /* Adjust the top margin to align with the schedule list */
 `;
 
 export const MapContainer = styled.div`
@@ -66,7 +66,8 @@ export const Header = styled.header`
 export const TabContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 20px; 
+  margin-top: 20px;
   gap: 10px;
 `;
 
@@ -127,6 +128,36 @@ export const SaveContainer = styled.div`
 
     &:hover {
       background-color: #ff4081;
+    }
+  }
+`;
+
+export const PlaceInfoContainer = styled.div`
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 600px;
+  color: #555;
+
+  h3 {
+    font-size: 1.5rem;
+    color: #ff69b4;
+    margin-bottom: 15px;
+  }
+
+  p {
+    margin: 10px 0;
+  }
+
+  a {
+    color: #ff69b4;
+    text-decoration: underline;
+
+    &:hover {
+      color: #ff4081;
     }
   }
 `;
